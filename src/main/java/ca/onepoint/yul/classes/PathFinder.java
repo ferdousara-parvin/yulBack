@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.*;
 
+/*
+* PathFinder Class inspired from our own previous work (https://github.com/Concordia-Campus-Guide/Concordia-Campus-Guide/blob/master/app/src/main/java/com/example/concordia_campus_guide/helper/PathFinder.java)
+* */
 @Data
 public class PathFinder {
 
@@ -25,6 +28,7 @@ public class PathFinder {
         this.targetNode = allNodesMap.get(computeID(endX, endY));
     }
 
+    // This is the method to call to get the list of squares that will lead to the destination [A* Search Algorithm]
     public List<SquareNode> getPathToDestination() {
 
         addInitialPointToMap();
@@ -40,7 +44,7 @@ public class PathFinder {
             if (currentNode.equals(targetNode)) {
                 return getSolutionPath(currentNode);
             }
-            addNearestWalkingPoints(currentNode);
+            addNearestSquareNodes(currentNode);
         }
         return new ArrayList<>();
     }
@@ -89,15 +93,15 @@ public class PathFinder {
                 if (adjacentY <= 29 && map[adjacentY][adjacentX].getValue() != 0)
                     adjacentIds.add(computeID(adjacentX, adjacentY));
 
-                node.setAdjacentSquareID(adjacentIds);
+                node.setAdjacentSquareIds(adjacentIds);
                 allNodesMap.put(node.getId(), node);
             }
         }
     }
 
 
-    private void addNearestWalkingPoints(final SquareNode currentNode) {
-        for (final int id : currentNode.getAdjacentSquareID()) {
+    private void addNearestSquareNodes(final SquareNode currentNode) {
+        for (final int id : currentNode.getAdjacentSquareIds()) {
 
             final SquareNode adjacentNode = allNodesMap.get(id);
             final double currentCost = currentNode.getCost() + getEuclideanDistance(currentNode, adjacentNode);
@@ -105,16 +109,16 @@ public class PathFinder {
 
             if (nodesVisited.containsKey(adjacentNode)) {
                 if (currentCost < previousCost) {
-                    updateWalkingNode(adjacentNode, currentNode, currentCost);
+                    updateNode(adjacentNode, currentNode, currentCost);
                 }
             } else if (currentCost < previousCost && previousCost > 0 || previousCost == 0) {
-                updateWalkingNode(adjacentNode, currentNode, currentCost);
+                updateNode(adjacentNode, currentNode, currentCost);
                 nodesToVisit.add(adjacentNode);
             }
         }
     }
 
-    private void updateWalkingNode(final SquareNode node, final SquareNode parent, final double cost) {
+    private void updateNode(final SquareNode node, final SquareNode parent, final double cost) {
         node.setParent(parent);
         node.setCost(cost);
         if (node.getHeuristic() == 0.0)
@@ -137,31 +141,6 @@ public class PathFinder {
         nodesToVisit.add(startNode);
     }
 
-
-    public int getLeftNeighbourID(SquareNode node) {
-        int x = node.getX() - 1;
-        int y = node.getY();
-        return computeID(x, y);
-    }
-
-    public int getRightNeighbourID(SquareNode node) {
-        int x = node.getX() + 1;
-        int y = node.getY();
-        return computeID(x, y);
-    }
-
-    public int getUpNeighbourID(SquareNode node) {
-        int x = node.getX();
-        int y = node.getY() - 1;
-        return computeID(x, y);
-    }
-
-    public int getDownNeighbourID(SquareNode node) {
-        int x = node.getX();
-        int y = node.getY() + 1;
-        return computeID(x, y);
-    }
-
     public int computeID(SquareNode node) {
         return computeID(node.getX(), node.getY());
     }
@@ -169,7 +148,6 @@ public class PathFinder {
     public int computeID(int x, int y) {
         return y * 30 + x + 1;
     }
-
 
     public static double getEuclideanDistance(final SquareNode start, final SquareNode finish) {
         double diffX = finish.getX() - start.getX();
@@ -185,9 +163,8 @@ public class PathFinder {
         return currentNode.getCost() + computeHeuristic(currentNode);
     }
 
-    /**
-     * This is a comparator object that will compare our Walking point based on a heuristic for a priorityQueue.
-     */
+
+    // Comparator used to compare the heuristics of 2 square nodes
     public class SquareComparator implements Comparator<SquareNode> {
         @Override
         public int compare(final SquareNode o1, final SquareNode o2) {
