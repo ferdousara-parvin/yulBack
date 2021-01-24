@@ -1,25 +1,37 @@
 package ca.onepoint.yul.controller;
 
 import ca.onepoint.yul.dto.AvatarDto;
+import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.service.IAvatarService;
+import ca.onepoint.yul.service.IMapService;
+import ca.onepoint.yul.classes.MovementManagement;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@EnableScheduling
 @RequestMapping("/api/avatar")
 public class AvatarController {
 
     @Resource
     private IAvatarService iAvatarService;
+
+    @Resource
+    private IMapService iMapService;
 
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
@@ -35,7 +47,7 @@ public class AvatarController {
             @ApiResponse(responseCode = "404", description = "Avatar not found",
                     content = @Content)})
     @CrossOrigin
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public AvatarDto findById(@PathVariable Integer id) {
         return iAvatarService.getAvatarById(id);
     }
@@ -47,16 +59,21 @@ public class AvatarController {
     }
 
     @CrossOrigin
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     public List<AvatarDto> findAvatarsByType(@PathVariable Integer type) {
-        return iAvatarService.getAvatarsByType(type);
+         return iAvatarService.getAvatarsByType(type);
     }
 
     @CrossOrigin
     @PostMapping("/move-avatars")
-    public void moveAvatars(@RequestBody List<AvatarDto> listAvatar) {
+    public void moveAvatars(@RequestBody List<AvatarDto> listAvatar) throws JSONException, JsonProcessingException {
+        long id = 1;
+        MapDto map = iMapService.getMapById(id);
+
+        for (int i = 0; i < listAvatar.size(); i++) {
+            listAvatar.set(i, MovementManagement.move(listAvatar.get(i), map));
+        }
+
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
     }
-
-
 }
