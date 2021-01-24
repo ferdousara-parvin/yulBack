@@ -147,15 +147,15 @@ public class AvatarController {
 
         //Get all the nodes
         int index = MovementManagement.moveCounter;
-        SquareNode node = MovementManagement.pathToDestination.get(index);
-        myAvatar.setX(node.getX());
-        myAvatar.setY(node.getY());
-        MovementManagement.moveCounter++;
+        if(index <= MovementManagement.pathToDestination.size() - 1){
+            SquareNode node = MovementManagement.pathToDestination.get(index);
+            myAvatar.setX(node.getX());
+            myAvatar.setY(node.getY());
+            MovementManagement.moveCounter++;
 
-        List<AvatarDto> list = new ArrayList<>();
-        list.add(myAvatar);
-        messagingTemplate.convertAndSend("/topic/progress", list);
-
-
+            List<AvatarDto> list = new ArrayList<>();
+            list.add(myAvatar);
+            messagingTemplate.convertAndSend("/topic/progress", list);
+        }
     }
 }

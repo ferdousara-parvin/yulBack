@@ -11,7 +11,7 @@ import java.util.List;
 public class MovementManagement {
 
     public static List<SquareNode> pathToDestination = new ArrayList<>();
-    public static int moveCounter = 0;
+    public static int moveCounter;
 
     public static boolean checkIfStreet(int x, int y, SquareDto[][] map){
         return map[y][x].getValue() == 1;
@@ -49,16 +49,18 @@ public class MovementManagement {
 
 
     public static void getPathToOnePoint(SquareDto[][] map, AvatarDto myAvatar) {
-        List<SquareNode> pathToMetroEntrance = getPathToTarget(map, myAvatar.getX(), myAvatar.getY(), 9,9);
-        List<SquareNode> pathToMetroExit = getPathToTarget(map, 9, 9, 15,25);
+        pathToDestination = new ArrayList<>();
+
+        List<SquareNode> pathToMetroEntrance = getPathToTarget(map, 8, 9, 9,9);
         List<SquareNode> pathToStarbucks = getPathToTarget(map,  15,25, 3, 21);
         List<SquareNode> pathToBurgerKing = getPathToTarget(map,   3, 21, 16, 14);
         List<SquareNode> pathToOnePoint = getPathToTarget(map,  16,14,13, 18);
 
         pathToDestination.addAll(pathToMetroEntrance);
-        pathToDestination.addAll(pathToMetroExit);
         pathToDestination.addAll(pathToStarbucks);
         pathToDestination.addAll(pathToBurgerKing);
         pathToDestination.addAll(pathToOnePoint);
+
+        moveCounter = 0;
     }
 }
