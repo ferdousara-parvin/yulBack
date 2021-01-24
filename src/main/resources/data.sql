@@ -28,6 +28,7 @@ CREATE TABLE type
 );
 
 
+-- Persisted additional information in the database
 
 INSERT INTO avatar (name, type, image, waiting, main, x, y)
 values ('corona', 1, '../assets/images/avatar.png', 1, 1, 29, 22), ('agent', 2, '../assets/images/police.png', 1, 0, 23, 3), ('pieton', 3, '../assets/images/pieton.png', 1, 0, 28, 3), ('kid', 4, '../assets/images/young_kid.PNG', 1, 1, 6, 8), ('old_person', 5, '../assets/images/old_person.PNG', 1, 1, 9, 8), ('handicap', 6, '../assets/images/handicap.PNG', 1, 1, 9, 15), ('fireworks', 7, '../assets/images/fireworks.png', 1, 1, 8, 15), ('fireworks', 7, '../assets/images/fireworks.png', 1, 1, 21, 13), ('fireworks', 7, '../assets/images/fireworks.png', 1, 1, 10, 13), ('fireworks', 7, '../assets/images/fireworks.png', 1, 1, 4, 14), ('fireworks', 7, '../assets/images/fireworks.png', 1, 1, 1, 3) ;

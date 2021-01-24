@@ -1,4 +1,4 @@
-package ca.onepoint.yul.classes;
+package ca.onepoint.yul.classes.TrafficLightManagement;
 
 import lombok.Data;
 

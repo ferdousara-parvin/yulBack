@@ -1,4 +1,4 @@
-package ca.onepoint.yul.classes;
+package ca.onepoint.yul.classes.TrafficLightManagement;
 
 import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.dto.SquareDto;
