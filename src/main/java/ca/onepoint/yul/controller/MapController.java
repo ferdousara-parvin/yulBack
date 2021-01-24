@@ -67,13 +67,5 @@ public class MapController {
         TrafficLightManagement.isRushHour = true;
     }
 
-    @CrossOrigin
-    @PostMapping("/triggerManifestation")
-    public void triggerManifestation() {
-        // Create 50 people
-        // Pick a random street
-        // MoveAvatar --> send data of 50 people that are located on that street
-
-    }
 
 }
