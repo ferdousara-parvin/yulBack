@@ -29,6 +29,13 @@ public class AvatarServiceImpl implements IAvatarService {
     }
 
     @Override
+    public List<AvatarDto> getAllAvatarsButFireworks() {
+        List<Avatar> result = new ArrayList<>();
+        avatarRepository.getAllAvatorsButFireworks().forEach(result::add);
+        return mapAvatarToDto(result);
+    }
+
+    @Override
     public List<AvatarDto> getAvatarsByType(Integer type) {
         return mapAvatarToDto(avatarRepository.findByType(type));
     }

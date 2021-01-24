@@ -65,6 +65,12 @@ public class AvatarController {
     }
 
     @CrossOrigin
+    @GetMapping("/get-all-avatars-but-fireworks")
+    public List<AvatarDto> findAvatarsByType() {
+        return iAvatarService.getAllAvatarsButFireworks();
+    }
+
+    @CrossOrigin
     @PostMapping("/move-avatars")
     public void moveAvatars(@RequestBody List<AvatarDto> listAvatar) throws JSONException, JsonProcessingException {
         long id = 1;
@@ -77,15 +83,28 @@ public class AvatarController {
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
     }
 
+    @CrossOrigin
+    @PostMapping("/stop-fireworks")
+    public void stopFireworks(@RequestBody List<AvatarDto> listAvatar) {
+
+        listAvatar.removeIf(avatar -> avatar.getType() == 7);
+        messagingTemplate.convertAndSend("/topic/progress", listAvatar);
+    }
+
 
     @CrossOrigin
-    @GetMapping("/fireworks")
-    public void displayFirworks() {
-        List<AvatarDto> listAvatar = iAvatarService.getAvatarsByType(7);
-
+    @PostMapping("/start-fireworks")
+    public void displayFireworks(@RequestBody List<AvatarDto> listAvatar) {
+        List<AvatarDto> listAvatarFireworks = iAvatarService.getAvatarsByType(7);
+        if(!listAvatar.contains(listAvatarFireworks.get(0))){
+            listAvatar.addAll(listAvatarFireworks);
+        }
         for(int i =0; i < listAvatar.size(); i++) {
-            listAvatar.get(i).setY((int)(Math.random()*29));
-            listAvatar.get(i).setX((int)(Math.random()*29));
+            if(listAvatar.get(i).getType() == 7) {
+                listAvatar.get(i).setY((int)(Math.random()*29));
+                listAvatar.get(i).setX((int)(Math.random()*29));
+            }
+
         }
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
     }
