@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ManifestationManagement {
-
+    public static ArrayList<AvatarDto> allProtesters = new ArrayList<>();
 
     public static List<AvatarDto> getProtestors(IMapService mapService) {
 
@@ -40,7 +40,9 @@ public class ManifestationManagement {
 
                     // If there is more than 1 square of route consecutively
                     if (blockLength > 1) {
-                        return createManifestorAvatars(variyingIndex, rowOrColumnIndex, blockLength, isColumn, square);
+                        ArrayList<AvatarDto> addedAvatars = createManifestorAvatars(variyingIndex, rowOrColumnIndex, blockLength, isColumn, square);
+                        allProtesters.addAll(addedAvatars);
+                        return allProtesters;
                     }
                 }
             }
@@ -49,7 +51,7 @@ public class ManifestationManagement {
             rowOrColumnIndex = new Random().nextInt(30);
         }
 
-        return null;
+        return allProtesters;
     }
 
     // returns the lenght of the consecutive block

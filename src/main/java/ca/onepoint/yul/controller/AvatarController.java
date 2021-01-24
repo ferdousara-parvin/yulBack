@@ -92,7 +92,7 @@ public class AvatarController {
     }
 
     @CrossOrigin
-    @PostMapping("/triggerManifestation")
+    @GetMapping("/triggerManifestation")
     public void triggerManifestation() {
         List<AvatarDto> protestors = ManifestationManagement.getProtestors(iMapService);
         messagingTemplate.convertAndSend("/topic/progress", protestors);
