@@ -11,7 +11,7 @@ public class MovementManagement {
     public static boolean checkIfStreet(int x, int y, SquareDto[][] map){
         return map[y][x].getValue() == 1;
     }
-    
+
     public static AvatarDto move(AvatarDto avatar, MapDto map) {
 
         // Move the avatar to the left
