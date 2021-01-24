@@ -4,8 +4,6 @@ import ca.onepoint.yul.dto.AvatarDto;
 import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.dto.SquareDto;
 
-Enum Dire
-
 
 public class MovementManagement {
 
@@ -13,10 +11,7 @@ public class MovementManagement {
     public static boolean checkIfStreet(int x, int y, SquareDto[][] map){
         return map[y][x].getValue() == 1;
     }
-
-    public static boolean checkIfGreen( SquareDto[][] map) {
-        TrafficLightManagement.allTrafficLights[y][x][]
-    }
+    
     public static AvatarDto move(AvatarDto avatar, MapDto map) {
 
         // Move the avatar to the left
