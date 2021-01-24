@@ -1,6 +1,5 @@
 package ca.onepoint.yul.classes;
 
-import ca.onepoint.yul.controller.MapController;
 import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.dto.SquareDto;
 import ca.onepoint.yul.service.IMapService;
@@ -12,6 +11,7 @@ import java.util.List;
 // Singleton static class to hold states
 public class TrafficLightManagement {
     public static TrafficLight[][][] allTrafficLights;
+    public static boolean isRushHour = false;
 
     public static void setUpTrafficLights(IMapService mapService) {
 
@@ -21,7 +21,7 @@ public class TrafficLightManagement {
             SquareDto[][] allSquares = montrealMap.getSquare();
 
             //Create 2D map that represents all the possible positions the map (each position has a traffic light array)
-            allTrafficLights = new TrafficLight[allSquares[0].length][allSquares.length][4];
+            allTrafficLights = new TrafficLight[allSquares[0].length][allSquares.length][6];
 
 
             for (int y = 0; y < allSquares.length; y++) {
@@ -33,8 +33,13 @@ public class TrafficLightManagement {
                         // Create car traffic lights
                         TrafficLight horizontalCarTrafficLight = new TrafficLight(TrafficLight.TrafficLightType.CAR, TrafficLight.Direction.HORIZONTAL);
                         TrafficLight verticalCarTrafficLight = new TrafficLight(TrafficLight.TrafficLightType.CAR, TrafficLight.Direction.VERTICAL);
+                        TrafficLight leftTurnCarTrafficLight = new TrafficLight(TrafficLight.TrafficLightType.CAR, TrafficLight.Direction.LEFT_TURN);
+                        TrafficLight rightTurnCarTrafficLight = new TrafficLight(TrafficLight.TrafficLightType.CAR, TrafficLight.Direction.RIGHT_TURN);
 
                         //TODO: Add pedestrian traffic lights
+
+
+                        // Configure lights to be opposite
 
                         // Initialize the timer for all of the traffic lights
                         horizontalCarTrafficLight.initTimer();
@@ -42,8 +47,10 @@ public class TrafficLightManagement {
                         //TODO: Init pedestrian traffic lights
 
                         // Add new created traffic lights to the list of all traffic lights
-                        allTrafficLights[y][x][0] = horizontalCarTrafficLight;
-                        allTrafficLights[y][x][1] = verticalCarTrafficLight;
+                        allTrafficLights[y][x][TrafficLight.Direction.HORIZONTAL.value] = horizontalCarTrafficLight;
+                        allTrafficLights[y][x][TrafficLight.Direction.VERTICAL.value] = verticalCarTrafficLight;
+                        allTrafficLights[y][x][TrafficLight.Direction.LEFT_TURN.value] = leftTurnCarTrafficLight;
+                        allTrafficLights[y][x][TrafficLight.Direction.RIGHT_TURN.value] = rightTurnCarTrafficLight;
                     }
                 }
             }

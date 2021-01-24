@@ -11,7 +11,18 @@ import java.util.TimerTask;
 public class TrafficLight {
     public enum TrafficLightType {CAR, PEDESTRIAN}
 
-    public enum Direction {HORIZONTAL, VERTICAL}
+
+    enum Direction {
+        HORIZONTAL(0),
+        VERTICAL(1),
+        LEFT_TURN(2),
+        RIGHT_TURN(3);
+
+        int value;
+        Direction(int value) {
+            this.value = value;
+        }
+    }
 
     public enum TrafficState {GREEN, RED}
 
