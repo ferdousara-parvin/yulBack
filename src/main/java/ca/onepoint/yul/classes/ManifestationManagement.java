@@ -56,7 +56,7 @@ public class ManifestationManagement {
         return allProtesters;
     }
 
-    // returns the length of the consecutive block
+    // Returns the length of the consecutive block
     private static int getLengthConsecutiveBlocks(int startIndex, int randomIndex, boolean isColumn, SquareDto[][] square) {
         for (int i = startIndex + 1; i < 30; i++) {
             SquareDto adjacentBlock = square[isColumn ? i : randomIndex][isColumn ? randomIndex : i];
@@ -86,7 +86,6 @@ public class ManifestationManagement {
                 protestor.setType(5);
 
                 listOfProtestors.add(protestor);
-
             }
         }
 

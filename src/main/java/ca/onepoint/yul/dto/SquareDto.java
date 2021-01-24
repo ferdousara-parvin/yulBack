@@ -4,8 +4,6 @@ import lombok.Data;
 
 @Data
 public class SquareDto {
-
     private Integer value;
     private String image;
-
 }
