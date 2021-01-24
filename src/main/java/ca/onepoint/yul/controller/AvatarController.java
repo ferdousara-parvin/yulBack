@@ -4,7 +4,7 @@ import ca.onepoint.yul.dto.AvatarDto;
 import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.service.IAvatarService;
 import ca.onepoint.yul.service.IMapService;
-import ca.onepoint.yul.utility.Movement;
+import ca.onepoint.yul.classes.MovementManagement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,13 +14,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@EnableScheduling
 @RequestMapping("/api/avatar")
 public class AvatarController {
 
@@ -68,10 +71,9 @@ public class AvatarController {
         MapDto map = iMapService.getMapById(id);
 
         for (int i = 0; i < listAvatar.size(); i++) {
-            listAvatar.set(i, Movement.move(listAvatar.get(i), map));
+            listAvatar.set(i, MovementManagement.move(listAvatar.get(i), map));
         }
+
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
     }
-
-
 }
