@@ -97,4 +97,11 @@ public class AvatarController {
         List<AvatarDto> protestors = ManifestationManagement.getProtestors(iMapService);
         messagingTemplate.convertAndSend("/topic/progress", protestors);
     }
+
+    @CrossOrigin
+    @GetMapping("/clearManifestation")
+    public void clearManifestation() {
+        ManifestationManagement.allProtesters = new ArrayList<>();
+        messagingTemplate.convertAndSend("/topic/progress", ManifestationManagement.allProtesters);
+    }
 }
