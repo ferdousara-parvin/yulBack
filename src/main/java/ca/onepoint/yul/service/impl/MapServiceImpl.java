@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service(value = "MapService")
 public class MapServiceImpl implements IMapService {
@@ -55,5 +56,48 @@ public class MapServiceImpl implements IMapService {
         }
         mapDto.setSquare(squareDtoList);
         return mapDto;
+    }
+
+    public ArrayList getRandomStreet() throws JSONException {
+        MapDto map = this.getAllMap().get(0);
+        SquareDto[][] square = map.getSquare();
+        Random rand = new Random();
+        boolean isColumn = rand.nextBoolean();
+        int index = rand.nextInt(30);
+
+        // road --> augmente block
+        // come accross somethign not a road --> return the block you had thus far or
+
+        if(isColumn) {
+
+            for(int i = 0; i < 30; i++) {
+                if(square[i][index].getValue() == 1) {
+                    if(i+1 > 30 && square[i+1][index].getValue() == 1) {
+                        if()
+                    }
+
+                }
+            }
+
+
+
+
+            int blocks = 0;
+
+            for(int i = 0; i < 30; i++) {
+                if(square[i][index].getValue() == 1)
+                    blocks++;
+                else if (square[i][index].getValue() != 1 && blocks >= 3)
+                    break;
+                else
+                    blocks = 0;
+            }
+
+        }
+
+    }
+
+    private void getConsecutiveBlocks(int x, boolean isColumn, SquareDto[][] square) {
+
     }
 }
