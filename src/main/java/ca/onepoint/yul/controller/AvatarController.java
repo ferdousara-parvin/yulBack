@@ -1,5 +1,6 @@
 package ca.onepoint.yul.controller;
 
+import ca.onepoint.yul.classes.ManifestationManagement;
 import ca.onepoint.yul.dto.AvatarDto;
 import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.service.IAvatarService;
@@ -80,7 +81,7 @@ public class AvatarController {
 
     @CrossOrigin
     @GetMapping("/fireworks")
-    public void displayFirworks() {
+    public void displayFireworks() {
         List<AvatarDto> listAvatar = iAvatarService.getAvatarsByType(7);
 
         for(int i =0; i < listAvatar.size(); i++) {
@@ -88,5 +89,12 @@ public class AvatarController {
             listAvatar.get(i).setX((int)(Math.random()*29));
         }
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
+    }
+
+    @CrossOrigin
+    @PostMapping("/triggerManifestation")
+    public void triggerManifestation() {
+        List<AvatarDto> protestors = ManifestationManagement.getProtestors(iMapService);
+        messagingTemplate.convertAndSend("/topic/progress", protestors);
     }
 }
