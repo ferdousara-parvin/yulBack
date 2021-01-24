@@ -1,8 +1,10 @@
 package ca.onepoint.yul.controller;
 
 import ca.onepoint.yul.classes.ManifestationManagement;
+import ca.onepoint.yul.classes.SquareNode;
 import ca.onepoint.yul.dto.AvatarDto;
 import ca.onepoint.yul.dto.MapDto;
+import ca.onepoint.yul.dto.SquareDto;
 import ca.onepoint.yul.service.IAvatarService;
 import ca.onepoint.yul.service.IMapService;
 import ca.onepoint.yul.classes.MovementManagement;
@@ -62,7 +64,7 @@ public class AvatarController {
     @CrossOrigin
     @GetMapping("/type/{type}")
     public List<AvatarDto> findAvatarsByType(@PathVariable Integer type) {
-         return iAvatarService.getAvatarsByType(type);
+        return iAvatarService.getAvatarsByType(type);
     }
 
     @CrossOrigin
@@ -70,11 +72,6 @@ public class AvatarController {
     public void moveAvatars(@RequestBody List<AvatarDto> listAvatar) throws JSONException, JsonProcessingException {
         long id = 1;
         MapDto map = iMapService.getMapById(id);
-
-        for (int i = 0; i < listAvatar.size(); i++) {
-            listAvatar.set(i, MovementManagement.move(listAvatar.get(i), map));
-        }
-
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
     }
 
@@ -122,5 +119,38 @@ public class AvatarController {
     public void clearManifestation() {
         ManifestationManagement.allProtesters = new ArrayList<>();
         messagingTemplate.convertAndSend("/topic/progress", ManifestationManagement.allProtesters);
+    }
+
+    @CrossOrigin
+    @GetMapping("/findPathToOnePoint")
+    public void findPathToOnePoint() {
+        AvatarDto myAvatar = findAvatarsByType(1).get(0);
+
+        //Get all the nodes
+        try {
+            MovementManagement.getPathToOnePoint(iMapService.getAllMap().get(0).getSquare(), myAvatar);
+        } catch (JSONException | JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @CrossOrigin
+    @GetMapping("/nextMoveToOnePoint")
+    public void nextMoveToOnePoint() {
+        AvatarDto myAvatar = findAvatarsByType(1).get(0);
+
+        //Get all the nodes
+        int index = MovementManagement.moveCounter;
+        if(index <= MovementManagement.pathToDestination.size() - 1){
+            SquareNode node = MovementManagement.pathToDestination.get(index);
+            myAvatar.setX(node.getX());
+            myAvatar.setY(node.getY());
+            MovementManagement.moveCounter++;
+
+            List<AvatarDto> list = new ArrayList<>();
+            list.add(myAvatar);
+            messagingTemplate.convertAndSend("/topic/progress", list);
+        }
     }
 }
