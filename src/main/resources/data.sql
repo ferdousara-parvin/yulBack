@@ -12,7 +12,7 @@ CREATE TABLE avatar
     y INT          NOT NULL default 0
 );
 
-DROP TABLE map;
+DROP TABLE IF EXISTS map;
 CREATE TABLE map
 (
     id   INT AUTO_INCREMENT PRIMARY KEY,
