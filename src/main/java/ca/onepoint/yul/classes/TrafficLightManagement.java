@@ -9,6 +9,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import java.util.List;
 
 // Singleton static class to hold states
+
 public class TrafficLightManagement {
     public static TrafficLight[][][] allTrafficLights;
     public static boolean isRushHour = false;
