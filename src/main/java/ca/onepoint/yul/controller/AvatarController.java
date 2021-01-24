@@ -76,4 +76,17 @@ public class AvatarController {
 
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
     }
+
+
+    @CrossOrigin
+    @GetMapping("/fireworks")
+    public void displayFirworks() {
+        List<AvatarDto> listAvatar = iAvatarService.getAvatarsByType(7);
+
+        for(int i =0; i < listAvatar.size(); i++) {
+            listAvatar.get(i).setY((int)(Math.random()*29));
+            listAvatar.get(i).setX((int)(Math.random()*29));
+        }
+        messagingTemplate.convertAndSend("/topic/progress", listAvatar);
+    }
 }
