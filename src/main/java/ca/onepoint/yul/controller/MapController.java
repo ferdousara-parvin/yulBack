@@ -1,5 +1,6 @@
 package ca.onepoint.yul.controller;
 
+import ca.onepoint.yul.classes.TrafficLightManagement;
 import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.service.IMapService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -50,6 +51,13 @@ public class MapController {
     @GetMapping("/")
     public List<MapDto> findAll() throws JSONException, JsonProcessingException {
         return iMapService.getAllMap();
+    }
+
+    @CrossOrigin
+    @PostMapping("/start")
+    public void start() throws JSONException, JsonProcessingException {
+        // Setup all the traffic lights
+        TrafficLightManagement.setUpTrafficLights(this.iMapService);
     }
 
 }
