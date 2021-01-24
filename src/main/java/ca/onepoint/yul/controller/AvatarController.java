@@ -1,5 +1,6 @@
 package ca.onepoint.yul.controller;
 
+import ca.onepoint.yul.classes.ManifestationManagement;
 import ca.onepoint.yul.dto.AvatarDto;
 import ca.onepoint.yul.dto.MapDto;
 import ca.onepoint.yul.service.IAvatarService;
@@ -107,5 +108,19 @@ public class AvatarController {
 
         }
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
+    }
+
+    @CrossOrigin
+    @GetMapping("/triggerManifestation")
+    public void triggerManifestation() {
+        List<AvatarDto> protestors = ManifestationManagement.getProtestors(iMapService);
+        messagingTemplate.convertAndSend("/topic/progress", protestors);
+    }
+
+    @CrossOrigin
+    @GetMapping("/clearManifestation")
+    public void clearManifestation() {
+        ManifestationManagement.allProtesters = new ArrayList<>();
+        messagingTemplate.convertAndSend("/topic/progress", ManifestationManagement.allProtesters);
     }
 }

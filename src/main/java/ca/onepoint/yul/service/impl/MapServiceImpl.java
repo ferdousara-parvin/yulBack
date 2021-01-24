@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service(value = "MapService")
 public class MapServiceImpl implements IMapService {
@@ -56,4 +57,8 @@ public class MapServiceImpl implements IMapService {
         mapDto.setSquare(squareDtoList);
         return mapDto;
     }
+
+
+
+
 }
