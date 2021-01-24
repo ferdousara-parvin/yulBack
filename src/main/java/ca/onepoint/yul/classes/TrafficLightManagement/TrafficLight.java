@@ -6,11 +6,9 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 @Data
 public class TrafficLight {
     public enum TrafficLightType {CAR, PEDESTRIAN}
-
 
     enum Direction {
         HORIZONTAL(0),
@@ -27,25 +25,25 @@ public class TrafficLight {
     public enum TrafficState {GREEN, RED}
 
     private TrafficState state;
-    private Timer timer; // keep track of the duration for each colour
+    private Timer timer;
     private TrafficLightType type;
     private Direction direction;
 
-    public TrafficLight(TrafficLightType type, Direction direction) {
+    TrafficLight(TrafficLightType type, Direction direction) {
         this.type = type;
         this.direction = direction;
     }
 
-    public void initTimer() {
+    void initTimer() {
         this.timer = new Timer();
         timer.scheduleAtFixedRate(new ToggleTrafficState(this), 0, 30 * 1000);
     }
 }
 
 class ToggleTrafficState extends TimerTask {
-    TrafficLight trafficLight;
+    private TrafficLight trafficLight;
 
-    public ToggleTrafficState(TrafficLight trafficLight) {
+    ToggleTrafficState(TrafficLight trafficLight) {
         this.trafficLight = trafficLight;
     }
 
