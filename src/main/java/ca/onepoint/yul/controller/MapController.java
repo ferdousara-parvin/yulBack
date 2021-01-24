@@ -55,10 +55,16 @@ public class MapController {
 
     @CrossOrigin
     @PostMapping("/start")
-    public void start() throws JSONException, JsonProcessingException {
+    public void start() {
         // Setup all the traffic lights
         TrafficLightManagement.setUpTrafficLights(this.iMapService);
     }
 
+    @CrossOrigin
+    @PostMapping("/triggerRushHour")
+    public void triggerRushHour() {
+        // Setup all the traffic lights
+        TrafficLightManagement.isRushHour = true;
+    }
 
 }

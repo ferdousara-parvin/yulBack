@@ -15,7 +15,7 @@ public class MovementManagement {
     }
 
     public static boolean checkIfGreen( SquareDto[][] map) {
-        TrafficLightManagement.allTrafficLights[y][x][] 
+        TrafficLightManagement.allTrafficLights[y][x][]
     }
     public static AvatarDto move(AvatarDto avatar, MapDto map) {
 
