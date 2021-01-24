@@ -12,4 +12,6 @@ public interface AvatarRepositoryCustom {
     AvatarDto findByIdAvatar(Integer id);
 
     List<Avatar> findByType(Integer id);
+
+    List<Avatar> getAllAvatorsButFireworks();
 }

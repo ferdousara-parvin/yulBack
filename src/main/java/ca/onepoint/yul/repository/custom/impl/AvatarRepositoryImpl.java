@@ -46,6 +46,21 @@ public class AvatarRepositoryImpl implements AvatarRepositoryCustom {
         return query.getResultList();
     }
 
+    @Override
+    public List<Avatar> getAllAvatorsButFireworks() {
+        // Construction de la requête
+        long id= 7;
+        StringBuilder queryBuilder = new StringBuilder();
+        // Clause SELECT
+        queryBuilder.append("SELECT a.id, a.name, a.type, a.image, a.waiting, a.main, a.x, a.y ");
+        // Clause FROM
+        queryBuilder.append("FROM Avatar a ");
+        // Clause WHERE
+        queryBuilder.append("WHERE not a.type = '" + id + "' ");
+        Query query = entityManager.createNativeQuery(queryBuilder.toString(), Avatar.class);
+        return query.getResultList();
+    }
+
     private AvatarDto mappingAvatartoDto(List<Object[]> infos) {
         Object[] avatar = infos.get(0);
         AvatarDto avatarDto = new AvatarDto();

@@ -11,4 +11,6 @@ public interface IAvatarService {
     List<AvatarDto> getAllAvatars();
 
     List<AvatarDto> getAvatarsByType(Integer type);
+
+    List<AvatarDto> getAllAvatarsButFireworks();
 }
