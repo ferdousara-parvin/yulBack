@@ -16,7 +16,7 @@ public class SquareNode {
     SquareNode parent;
     double cost;
     double heuristic;
-    ArrayList<Integer> adjacentSquareID;
+    ArrayList<Integer> adjacentSquareIds;
 
     @Override
     public boolean equals(Object o) {

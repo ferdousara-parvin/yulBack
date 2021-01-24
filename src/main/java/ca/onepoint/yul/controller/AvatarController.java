@@ -78,11 +78,6 @@ public class AvatarController {
     public void moveAvatars(@RequestBody List<AvatarDto> listAvatar) throws JSONException, JsonProcessingException {
         long id = 1;
         MapDto map = iMapService.getMapById(id);
-
-        for (int i = 0; i < listAvatar.size(); i++) {
-            listAvatar.set(i, MovementManagement.move(listAvatar.get(i), map));
-        }
-
         messagingTemplate.convertAndSend("/topic/progress", listAvatar);
     }
 
