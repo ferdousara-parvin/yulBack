@@ -8,6 +8,10 @@ import java.util.TimerTask;
 
 @Data
 public class TrafficLight {
+
+    public static final int DELAY = 0;
+    public static final int PERIOD_IN_SAME_STATE = 30 * 1000;
+
     public enum TrafficLightType {CAR, PEDESTRIAN}
 
     enum Direction {
@@ -17,6 +21,7 @@ public class TrafficLight {
         RIGHT_TURN(3);
 
         int value;
+
         Direction(int value) {
             this.value = value;
         }
@@ -36,20 +41,28 @@ public class TrafficLight {
 
     void initTimer() {
         this.timer = new Timer();
-        timer.scheduleAtFixedRate(new ToggleTrafficState(this), 0, 30 * 1000);
+        timer.scheduleAtFixedRate(new ToggleTrafficStateTask(this), DELAY, PERIOD_IN_SAME_STATE);
+    }
+
+    void toggleState() {
+        this.state = this.state == TrafficState.GREEN ?
+                TrafficState.RED :
+                TrafficState.GREEN;
+    }
+
+    static class ToggleTrafficStateTask extends TimerTask {
+        private final TrafficLight trafficLight;
+
+        ToggleTrafficStateTask(TrafficLight trafficLight) {
+            this.trafficLight = trafficLight;
+        }
+
+        @Override
+        public void run() {
+            trafficLight.toggleState();
+            System.out.println("Toggle Traffic Light State: " + trafficLight.getState() + new Date());
+        }
     }
 }
 
-class ToggleTrafficState extends TimerTask {
-    private TrafficLight trafficLight;
 
-    ToggleTrafficState(TrafficLight trafficLight) {
-        this.trafficLight = trafficLight;
-    }
-
-    @Override
-    public void run() {
-        trafficLight.setState(trafficLight.getState() == TrafficLight.TrafficState.GREEN ? TrafficLight.TrafficState.RED : TrafficLight.TrafficState.GREEN);
-        System.out.println("Toggle Traffic Light State: " + trafficLight.getState() + new Date());
-    }
-}
