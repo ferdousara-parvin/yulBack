@@ -33,7 +33,7 @@ public class ManifestationManagement {
         square = map.getSquare();
 
         protestorsBlockVerticalStreet = new Random().nextBoolean(); // to determine protestors direction
-        randomStreetIndex = new Random().nextInt(MAP_SIZE); // random street
+        randomStreetIndex = new Random().nextInt(MAP_SIZE);
         int counter = 0;
 
         while (counter <= THRESHOLD) { // Threshold added so that this does not get stuck in an infinite loop
@@ -79,6 +79,8 @@ public class ManifestationManagement {
         return square[nextY][nextX];
     }
 
+    //Check if there is enough space for a manifestation to happen starting from a certain point.
+    // If it can, then create the protestors at the blocked street coordinates.
     private static boolean protestorsCanExist(int startIndex) {
         for (int varyingIndex = startIndex; varyingIndex < MAP_SIZE; varyingIndex++) {
             int nextY = protestorsBlockVerticalStreet ? varyingIndex : randomStreetIndex;
@@ -86,7 +88,7 @@ public class ManifestationManagement {
             if (square[nextY][nextX].isRoute()) {
                 int blockLength = getLengthConsecutiveBlocks(varyingIndex, protestorsBlockVerticalStreet);
 
-                // If there is more than 1 square of route consecutively
+                // If there is more than 1 square of route consecutively, then the manifestation can occur
                 if (blockLength > 1) {
                     ArrayList<AvatarDto> addedAvatars = createProtestors(varyingIndex, blockLength);
                     allProtesters.addAll(addedAvatars);

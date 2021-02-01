@@ -8,11 +8,11 @@ public class SquareDto {
     private Integer value;
     private String image;
 
-    public boolean isRoute(){
-        return   value == SquareType.ROUTE.value;
+    public boolean isRoute() {
+        return value == SquareType.ROUTE.value;
     }
 
-    public boolean isWalkable(){
+    public boolean isWalkable() {
         return value != SquareType.ROOF.value;
     }
 }
