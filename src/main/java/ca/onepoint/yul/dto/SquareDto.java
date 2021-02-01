@@ -11,4 +11,8 @@ public class SquareDto {
     public boolean isRoute(){
         return   value == SquareType.ROUTE.value;
     }
+
+    public boolean isWalkable(){
+        return value != SquareType.ROOF.value;
+    }
 }
