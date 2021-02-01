@@ -6,11 +6,12 @@ import lombok.Data;
 import java.util.*;
 
 /*
-* PathFinder Class inspired from our own previous work (https://github.com/Concordia-Campus-Guide/Concordia-Campus-Guide/blob/master/app/src/main/java/com/example/concordia_campus_guide/helper/PathFinder.java)
-* */
+ * PathFinder Class inspired from our own previous work (https://github.com/Concordia-Campus-Guide/Concordia-Campus-Guide/blob/master/app/src/main/java/com/example/concordia_campus_guide/helper/PathFinder.java)
+ * */
 @Data
 public class PathFinder {
 
+    public static final int MAP_SIZE = 30;
     private HashMap<Integer, SquareNode> allNodesMap;
     private PriorityQueue<SquareNode> nodesToVisit;
     private HashMap<SquareNode, Double> nodesVisited;
@@ -54,8 +55,8 @@ public class PathFinder {
     private void populateGraph(SquareDto[][] map) {
         allNodesMap = new HashMap<>();
         // Populate hashmap
-        for (int i = 0; i < 30; i++) {
-            for (int j = 0; j < 30; j++) {
+        for (int i = 0; i < MAP_SIZE; i++) {
+            for (int j = 0; j < MAP_SIZE; j++) {
                 SquareDto squareDto = map[i][j];
 
                 SquareNode node = new SquareNode();
@@ -69,34 +70,58 @@ public class PathFinder {
                 // Populate the adjacent list
                 ArrayList<Integer> adjacentIds = new ArrayList<>();
 
-                // Left
-                int adjacentX = node.getX() - 1;
-                int adjacentY = node.getY();
-                if (adjacentX >= 0 && map[adjacentY][adjacentX].getValue() != 0)
-                    adjacentIds.add(computeID(adjacentX, adjacentY));
-
-                //Right
-                adjacentX = node.getX() + 1;
-                adjacentY = node.getY();
-                if (adjacentX <= 29 && map[adjacentY][adjacentX].getValue() != 0)
-                    adjacentIds.add(computeID(adjacentX, adjacentY));
-
-                //Up
-                adjacentX = node.getX();
-                adjacentY = node.getY() - 1;
-                if (adjacentY >= 0 && map[adjacentY][adjacentX].getValue() != 0)
-                    adjacentIds.add(computeID(adjacentX, adjacentY));
-
-                //Down
-                adjacentX = node.getX();
-                adjacentY = node.getY() + 1;
-                if (adjacentY <= 29 && map[adjacentY][adjacentX].getValue() != 0)
-                    adjacentIds.add(computeID(adjacentX, adjacentY));
+                adjacentIds = addToList(adjacentIds, getLeftSquareId(map, node));
+                adjacentIds = addToList(adjacentIds, getRightSquareId(map, node));
+                adjacentIds = addToList(adjacentIds, getUpSquareId(map, node));
+                adjacentIds = addToList(adjacentIds, getDownSquareId(map, node));
 
                 node.setAdjacentSquareIds(adjacentIds);
                 allNodesMap.put(node.getId(), node);
             }
         }
+    }
+
+    private ArrayList<Integer> addToList(ArrayList<Integer> adjacentIds, int adjacentId) {
+        if (adjacentId >= 0) {
+            adjacentIds.add(adjacentId);
+        }
+        return adjacentIds;
+    }
+
+    private int getLeftSquareId(SquareDto[][] map, SquareNode node) {
+        int adjacentX = node.getX() - 1;
+        int adjacentY = node.getY();
+        if (adjacentX >= 0 && map[adjacentY][adjacentX].isWalkable()) {
+            return computeID(adjacentX, adjacentY);
+        }
+        return -1;
+    }
+
+    private int getRightSquareId(SquareDto[][] map, SquareNode node) {
+        int adjacentX = node.getX() + 1;
+        int adjacentY = node.getY();
+        if (adjacentX < MAP_SIZE && map[adjacentY][adjacentX].isWalkable()) {
+            return computeID(adjacentX, adjacentY);
+        }
+        return -1;
+    }
+
+    private int getUpSquareId(SquareDto[][] map, SquareNode node) {
+        int adjacentX = node.getX();
+        int adjacentY = node.getY() - 1;
+        if (adjacentY >= 0 && map[adjacentY][adjacentX].isWalkable()) {
+            return computeID(adjacentX, adjacentY);
+        }
+        return -1;
+    }
+
+    private int getDownSquareId(SquareDto[][] map, SquareNode node) {
+        int adjacentX = node.getX();
+        int adjacentY = node.getY() + 1;
+        if (adjacentY < MAP_SIZE && map[adjacentY][adjacentX].isWalkable()) {
+            return computeID(adjacentX, adjacentY);
+        }
+        return -1;
     }
 
 
@@ -146,7 +171,7 @@ public class PathFinder {
     }
 
     public int computeID(int x, int y) {
-        return y * 30 + x + 1;
+        return y * MAP_SIZE + x + 1;
     }
 
     public static double getEuclideanDistance(final SquareNode start, final SquareNode finish) {
@@ -168,13 +193,7 @@ public class PathFinder {
     public class SquareComparator implements Comparator<SquareNode> {
         @Override
         public int compare(final SquareNode o1, final SquareNode o2) {
-            if (computeEstimatedCostFromInitialToDestination(o1) < computeEstimatedCostFromInitialToDestination(o2)) {
-                return -1;
-            }
-            if (computeEstimatedCostFromInitialToDestination(o1) > computeEstimatedCostFromInitialToDestination(o2)) {
-                return 1;
-            }
-            return 0;
+            return Double.compare(computeEstimatedCostFromInitialToDestination(o1), computeEstimatedCostFromInitialToDestination(o2));
         }
     }
 }
